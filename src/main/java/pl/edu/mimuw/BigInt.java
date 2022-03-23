@@ -9,13 +9,18 @@ public final class BigInt {
   private final boolean isPositive;
 
   public BigInt(String number) {
-    isPositive = number.charAt(0) != '-';
+    boolean isPositive = number.charAt(0) != '-';
 
-    digits = new int[number.length() - (isPositive ? 0 : 1)];
+    int[] digits = new int[number.length() - (isPositive ? 0 : 1)];
 
     for (int i = isPositive ? 0 : 1; i < number.length(); i++) {
       digits[number.length() - i - 1] = number.charAt(i) - '0';
     }
+    this.digits = removeLeadingZeros(digits);
+
+    if(this.digits[this.digits.length-1] == 0) // handle "-0" thing
+      isPositive = true;
+    this.isPositive = isPositive;
   }
 
   public BigInt(int[] digits, boolean isPositive) {
@@ -30,6 +35,12 @@ public final class BigInt {
   public BigInt neg() {
     final var digits = Arrays.copyOf(this.digits, this.digits.length);
     return new BigInt(digits, !this.isPositive);
+  }
+
+  private int[] removeLeadingZeros(int[] digits) {
+    int zeros = 0;
+    while(zeros < digits.length - 1 && digits[digits.length - zeros - 1] == 0) zeros++;
+    return Arrays.copyOf(digits, digits.length - zeros);
   }
 
   public BigInt add(BigInt other) {
@@ -70,15 +81,25 @@ public final class BigInt {
       digits[digits.length - 1] *= -1;
     }
 
-    int zeros = 0;
-    while(zeros < digits.length - 1 && digits[digits.length - zeros - 1] == 0) zeros++;
-    int[] resDigits = Arrays.copyOf(digits, digits.length - zeros);
-
-    return new BigInt(resDigits, isPositive);
+    return new BigInt(removeLeadingZeros(digits), isPositive);
   }
 
   public BigInt times(BigInt other) {
-    throw new IllegalStateException("TODO task 3: implement multiplication");
+    int[] digits = new int[this.digits.length + other.digits.length];
+    boolean isPositive = other.isPositive == this.isPositive;
+
+    for(int i = 0; i < other.digits.length; i++) {
+      for(int j = 0; j < this.digits.length; j++) {
+        digits[i+j] += this.digits[j] * other.digits[i];
+      }
+    }
+
+    for(int i = 0; i < digits.length - 1; i++) {
+      digits[i+1] = digits[i]/10;
+      digits[i] %= 10;
+    }
+
+    return new BigInt(removeLeadingZeros(digits), isPositive);
   }
 
   @Override
