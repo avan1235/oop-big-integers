@@ -2,6 +2,9 @@ package pl.edu.mimuw;
 
 import java.util.Arrays;
 
+import static java.lang.Math.max;
+
+
 public final class BigInt {
 
   private final int[] digits;
@@ -9,7 +12,18 @@ public final class BigInt {
   private final boolean isPositive;
 
   public BigInt(String number) {
-    throw new IllegalStateException("TODO task 1: parse number from valid String");
+    boolean isPositive = true;
+    int first = 0;
+      if(number.charAt(0) == '-')
+      {
+        first++;
+        isPositive = false;
+      }
+      this.digits = new int[number.length()-first];
+      this.isPositive = isPositive;
+      for(int i = first; i<number.length(); i++) {
+        this.digits[i] = number.charAt(i) - '0';
+      }
   }
 
   public BigInt(int[] digits, boolean isPositive) {
@@ -27,7 +41,8 @@ public final class BigInt {
   }
 
   public BigInt add(BigInt other) {
-    throw new IllegalStateException("TODO task 2: implement addition");
+    int [] c = new int [max( this.digits.length, other.digits.length)];
+
   }
 
   public BigInt times(BigInt other) {
