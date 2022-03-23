@@ -9,7 +9,22 @@ public final class BigInt {
   private final boolean isPositive;
 
   public BigInt(String number) {
-    throw new IllegalStateException("TODO task 1: parse number from valid String");
+    int len = number.length();
+    if(number.charAt(0) != '-'){
+    this.digits = new int[len];
+      for(int i=0; i < len;i++){
+        this.digits[i]=number.charAt(len-1-i);
+      }
+      isPositive = true;
+    }
+    else
+    {
+    this.digits = new int[len-1];
+      for(int i=0; i<len-1;i++){
+        this.digits[i]=number.charAt(len-1-i);
+      }
+    isPositive = true;
+    }
   }
 
   public BigInt(int[] digits, boolean isPositive) {
@@ -36,7 +51,11 @@ public final class BigInt {
 
   @Override
   public String toString() {
-    throw new IllegalStateException("TODO task 4: implement creating representation");
+    String output = "";
+    for (int i=0; i<this.digits.length; i++){
+      output = output + String.valueOf(digits[i]);
+    }
+    return output;
   }
 
   @Override
@@ -56,3 +75,4 @@ public final class BigInt {
       && this.isPositive == other.isPositive;
   }
 }
+
