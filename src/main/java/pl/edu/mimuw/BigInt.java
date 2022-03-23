@@ -95,7 +95,7 @@ public final class BigInt {
     }
 
     for(int i = 0; i < digits.length - 1; i++) {
-      digits[i+1] = digits[i]/10;
+      digits[i+1] += digits[i] / 10;
       digits[i] %= 10;
     }
 
