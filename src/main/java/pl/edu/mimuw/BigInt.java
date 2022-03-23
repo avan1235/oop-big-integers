@@ -121,7 +121,8 @@ public final class BigInt {
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof final BigInt other)) return false;
+    if (!(obj instanceof BigInt)) return false;
+    final var other = (BigInt) obj;
 
     return Arrays.equals(this.digits, other.digits)
       && this.isPositive == other.isPositive;
