@@ -18,6 +18,17 @@ class BigIntTest {
   }
 
   @Test
+  void testSmallWithZeroAdd() {
+    final var x = new BigInt(42);
+    final var y = new BigInt(-44);
+    final var expectedResult = "-2";
+
+    final var result = x.add(y).toString();
+
+    assertEquals(expectedResult, result);
+  }
+
+  @Test
   void testBigAdd() {
     final var x = new BigInt("-853487563485263495358327542");
     final var y = new BigInt("123432958723478523239");
@@ -30,12 +41,46 @@ class BigIntTest {
 
   @Test
   void testSmallTimes() {
-    throw new IllegalStateException("TODO task 5: write test for multiplication of small numbers");
+    final var x = new BigInt(11);
+    final var y = new BigInt(11);
+    final var expectedResult = "121";
+
+    final var result = x.times(y).toString();
+
+    assertEquals(expectedResult, result);
+  }
+
+  @Test
+  void testSmallTimes2() {
+    final var x = new BigInt(11);
+    final var y = new BigInt(-11);
+    final var expectedResult = "-121";
+
+    final var result = x.times(y).toString();
+
+    assertEquals(expectedResult, result);
   }
 
   @Test
   void testBigTimes() {
-    throw new IllegalStateException("TODO task 6: write test for multiplication of big numbers");
+      final var x = new BigInt("-5439875254");
+      final var y = new BigInt("-2759084374389743809");
+      final var expectedResult = "15009074811940838697978802486";
+
+      final var result = x.times(y).toString();
+
+      assertEquals(expectedResult, result);
+  }
+
+  @Test
+  void testBigTimes2() {
+    final var x = new BigInt("8795");
+    final var y = new BigInt("-2307");
+    final var expectedResult = "-20290065";
+
+    final var result = x.times(y).toString();
+
+    assertEquals(expectedResult, result);
   }
 
   @Test
