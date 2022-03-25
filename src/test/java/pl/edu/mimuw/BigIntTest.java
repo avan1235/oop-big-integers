@@ -71,6 +71,34 @@ class BigIntTest {
     }
 
     @Test
+    void testReduction() {
+        final var x = new BigInt("-4242");
+        final var y = new BigInt("4242");
+        final var expectedResult = "0";
+
+        final var result = x.add(y).toString();
+
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    void testMultipleOperations() {
+        final var x = new BigInt("-4242");
+        final var y = new BigInt("10000000");
+        final var z = new BigInt("-10000000");
+        final var expectedResult = "-279945640000000";
+
+        var result = x.add(y);
+        result = result.add(z);
+        result = result.times(x);
+        result = result.add(y);
+        result = result.times(z);
+
+
+        assertEquals(expectedResult, result.toString());
+    }
+
+    @Test
     void testNegation() {
         final var small = new BigInt("37");
         final var big = new BigInt("-3453458734658736");

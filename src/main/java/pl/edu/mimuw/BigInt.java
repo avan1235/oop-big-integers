@@ -10,15 +10,20 @@ public final class BigInt {
 
     public BigInt(String number) {
         this.isPositive = number.charAt(0) != '-';
-        int shift = this.isPositive ? 0 : 1;
+        final int shift = this.isPositive ? 0 : 1;
         this.digits = new int[number.length() - shift];
 
         for (int i = 0; i < number.length() - shift; i++)
-            this.digits[number.length()- shift - i -1] = Character.getNumericValue(number.charAt(i+shift));
+            this.digits[number.length() - shift - i - 1] = Character.getNumericValue(number.charAt(i + shift));
     }
 
     public BigInt(int[] digits, boolean isPositive) {
-        this.digits = Arrays.copyOf(digits, digits.length);
+        var numLength = digits.length - 1;
+        while (numLength > -1) {
+            if (digits[numLength] != 0) break;
+            numLength--;
+        }
+        this.digits = Arrays.copyOf(digits, numLength + 1);
         this.isPositive = isPositive;
     }
 
@@ -31,7 +36,12 @@ public final class BigInt {
         return new BigInt(digits, !this.isPositive);
     }
 
-    // Returns 1 when Abs(this) > Abs(other), 0 when Abs(This) = Abs(Other), -1 otherwise.
+    /**
+     * absCompare compares absolute values of two BigInts
+     *
+     * @param other compared number
+     * @return 1 when Abs(this) > Abs(other), 0 when Abs(This) = Abs(Other), -1 otherwise.
+     */
     private int absCompare(BigInt other) {
         if (this.digits.length > other.digits.length)
             return 1;
@@ -47,10 +57,10 @@ public final class BigInt {
         BigInt smaller = this.absCompare(other) == 1 ? other : this;
         BigInt bigger = this.absCompare(other) == 1 ? this : other;
 
-        int minIndex = smaller.digits.length;
-        int sign = smaller.isPositive == bigger.isPositive ? 1 : -1;
+        final int minIndex = smaller.digits.length;
+        final int sign = smaller.isPositive == bigger.isPositive ? 1 : -1;
 
-        int[] newDigits = Arrays.copyOf(bigger.digits, bigger.digits.length+1);
+        int[] newDigits = Arrays.copyOf(bigger.digits, bigger.digits.length + 1);
 
         for (int i = 0; i < minIndex; i++) {
             newDigits[i] += sign * smaller.digits[i];
@@ -63,7 +73,6 @@ public final class BigInt {
                 newDigits[i] += 10;
             }
         }
-
         return new BigInt(newDigits, bigger.isPositive);
     }
 
@@ -71,36 +80,33 @@ public final class BigInt {
         BigInt smaller = this.absCompare(other) == 1 ? other : this;
         BigInt bigger = this.absCompare(other) == 1 ? this : other;
 
-        int minIndex = smaller.digits.length;
-        int maxIndex = bigger.digits.length;
+        final int minIndex = smaller.digits.length;
+        final int maxIndex = bigger.digits.length;
 
-        int[] newDigits = new int[bigger.digits.length+smaller.digits.length];
+        int[] newDigits = new int[bigger.digits.length + smaller.digits.length];
 
         for (int i = 0; i < minIndex; i++) {
             for (int j = 0; j < maxIndex; j++) {
-                newDigits[j+i] += smaller.digits[i] * bigger.digits[j];
+                newDigits[j + i] += smaller.digits[i] * bigger.digits[j];
 
-                if (newDigits[j+i] > 9) {
-                    newDigits[j+i+1] += newDigits[j+i] / 10;
-                    newDigits[j+i] %= 10;
+                if (newDigits[j + i] > 9) {
+                    newDigits[j + i + 1] += newDigits[j + i] / 10;
+                    newDigits[j + i] %= 10;
                 }
             }
         }
-
         return new BigInt(newDigits, bigger.isPositive == smaller.isPositive);
     }
 
     @Override
     public String toString() {
-        char[] charRep = new char[digits.length+1];
-
-        for (int i = 0; i < digits.length; i++)
-            charRep[digits.length - i] = Character.forDigit(digits[i], 10);
-
-        charRep[0] = this.isPositive ? '0' : '-';
-        String res = new String(charRep);
-
-        return res.replaceAll("(?<=^-|^)0+(?!$)", ""); // Cut leading zeros
+        if (this.digits.length == 0) return "0";
+        final var result = new StringBuilder();
+        for (int i = 0; i < this.digits.length; i++) {
+            if (i == 0 && !this.isPositive) result.append("-");
+            result.append(this.digits[this.digits.length - i - 1]);
+        }
+        return result.toString();
     }
 
     @Override
