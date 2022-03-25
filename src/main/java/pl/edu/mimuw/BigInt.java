@@ -11,17 +11,10 @@ public final class BigInt {
   public BigInt(String number) {
     this.isPositive = !(number.charAt(0) == '-');
     final var signShift = isPositive ? 0 : 1;
-    var leadingZeros = 0;
 
-    for (int i = signShift; i < number.length(); i++) {
-      if (number.charAt(i) != '0') {
-        leadingZeros = i - signShift;
-        break;
-      }
-    }
-    this.digits = new int[number.length() - signShift - leadingZeros];
+    this.digits = new int[number.length() - signShift];
 
-    for (int i = number.length() - 1; i >= signShift + leadingZeros; i--) {
+    for (int i = number.length() - 1; i >= signShift; i--) {
       this.digits[number.length() - i - 1] = Character.getNumericValue(number.charAt(i));
     }
   }
