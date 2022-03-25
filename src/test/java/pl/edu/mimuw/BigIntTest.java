@@ -12,9 +12,13 @@ class BigIntTest {
     final var y = new BigInt(-24);
     final var expectedResult = "18";
 
-    final var result = x.add(y).toString();
+    final var result = x.add(y);
 
-    assertEquals(expectedResult, result);
+    assertEquals(expectedResult, result.toString());
+
+    assertEquals("-1", new BigInt(69).add(new BigInt(-70)).toString());
+    assertEquals("0", new BigInt(69).add(new BigInt(-69)).toString());
+    assertEquals("1", new BigInt(69).add(new BigInt(-68)).toString());
   }
 
   @Test
@@ -30,12 +34,31 @@ class BigIntTest {
 
   @Test
   void testSmallTimes() {
-    throw new IllegalStateException("TODO task 5: write test for multiplication of small numbers");
+    final var x = new BigInt("21");
+    final var y = new BigInt("-37");
+    final var expectedResult = "-777";
+
+    final var result = x.times(y).toString();
+
+    assertEquals(expectedResult, result);
+    assertEquals("1", new BigInt(1).times(new BigInt(1)).toString());
+    assertEquals("-1", new BigInt(1).times(new BigInt(-1)).toString());
+    assertEquals("-1", new BigInt(-1).times(new BigInt(1)).toString());
+    assertEquals("1", new BigInt(-1).times(new BigInt(-1)).toString());
+    assertEquals("0", new BigInt(-1).times(new BigInt(0)).toString());
   }
 
   @Test
   void testBigTimes() {
-    throw new IllegalStateException("TODO task 6: write test for multiplication of big numbers");
+    final var x = new BigInt("2100000000");
+    final var y = new BigInt("-3700000000");
+    final var expectedResult = "-7770000000000000000";
+
+    final var result = x.times(y).toString();
+
+    assertEquals(expectedResult, result);
+
+    assertEquals("0", new BigInt(0).times(new BigInt("-999999999999999999")).toString());
   }
 
   @Test
