@@ -9,13 +9,8 @@ public final class BigInt {
     private final boolean isPositive;
 
     public BigInt(String number) {
-        int shift = 0;
-
         this.isPositive = number.charAt(0) != '-';
-
-        if (!this.isPositive)
-            shift = 1;
-
+        int shift = this.isPositive ? 0 : 1;
         this.digits = new int[number.length() - shift];
 
         for (int i = 0; i < number.length() - shift; i++)
@@ -36,6 +31,7 @@ public final class BigInt {
         return new BigInt(digits, !this.isPositive);
     }
 
+    // Returns 1 when Abs(this) > Abs(other), 0 when Abs(This) = Abs(Other), -1 otherwise.
     private int absCompare(BigInt other) {
         if (this.digits.length > other.digits.length)
             return 1;
@@ -47,7 +43,7 @@ public final class BigInt {
     }
 
     public BigInt add(BigInt other) {
-        // name numbers as smaller/bigger based on their abs values
+        // Name numbers as smaller/bigger based on their absolute values.
         BigInt smaller = this.absCompare(other) == 1 ? other : this;
         BigInt bigger = this.absCompare(other) == 1 ? this : other;
 
@@ -72,26 +68,39 @@ public final class BigInt {
     }
 
     public BigInt times(BigInt other) {
-        throw new IllegalStateException("TODO task 3: implement multiplication");
+        BigInt smaller = this.absCompare(other) == 1 ? other : this;
+        BigInt bigger = this.absCompare(other) == 1 ? this : other;
+
+        int minIndex = smaller.digits.length;
+        int maxIndex = bigger.digits.length;
+
+        int[] newDigits = new int[bigger.digits.length+smaller.digits.length];
+
+        for (int i = 0; i < minIndex; i++) {
+            for (int j = 0; j < maxIndex; j++) {
+                newDigits[j+i] += smaller.digits[i] * bigger.digits[j];
+
+                if (newDigits[j+i] > 9) {
+                    newDigits[j+i+1] += newDigits[j+i] / 10;
+                    newDigits[j+i] %= 10;
+                }
+            }
+        }
+
+        return new BigInt(newDigits, bigger.isPositive == smaller.isPositive);
     }
 
     @Override
     public String toString() {
         char[] charRep = new char[digits.length+1];
 
-        for (int i = 0; i < digits.length; i++) {
+        for (int i = 0; i < digits.length; i++)
             charRep[digits.length - i] = Character.forDigit(digits[i], 10);
-        }
 
-        if (!isPositive)
-            charRep[0] = '-';
-        else
-            charRep[0] = '0';
-
-
+        charRep[0] = this.isPositive ? '0' : '-';
         String res = new String(charRep);
 
-        return res.replaceAll("(?<=^-|^)0+(?!$)", "");
+        return res.replaceAll("(?<=^-|^)0+(?!$)", ""); // Cut leading zeros
     }
 
     @Override
