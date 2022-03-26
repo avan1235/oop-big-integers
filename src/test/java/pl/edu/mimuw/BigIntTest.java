@@ -1,3 +1,5 @@
+/* Marcin Żołek */
+
 package pl.edu.mimuw;
 
 import org.junit.jupiter.api.Test;
