@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BigIntTest {
 
   @Test
-  void testSmallAdd() {
+  void testSmallAddPosNeg() {
     final var x = new BigInt(42);
     final var y = new BigInt(-24);
     final var expectedResult = "18";
@@ -16,6 +16,18 @@ class BigIntTest {
 
     assertEquals(expectedResult, result);
   }
+
+  @Test
+  void testSmallAddPosPos() {
+    final var x = new BigInt(488);
+    final var y = new BigInt(367);
+    final var expectedResult = "855";
+
+    final var result = x.add(y).toString();
+
+    assertEquals(expectedResult, result);
+  }
+
 
   @Test
   void testBigAdd() {
@@ -30,12 +42,22 @@ class BigIntTest {
 
   @Test
   void testSmallTimes() {
-    throw new IllegalStateException("TODO task 5: write test for multiplication of small numbers");
+    final var x = new BigInt("-452");
+    final var y = new BigInt("323");
+    final var expectedResult = "-145996";
+
+    final var result = x.times(y).toString();
+    assertEquals(expectedResult, result);
   }
 
   @Test
   void testBigTimes() {
-    throw new IllegalStateException("TODO task 6: write test for multiplication of big numbers");
+    final var x = new BigInt("34567897654345678");
+    final var y = new BigInt("-54567876543456787654345678765");
+    final var expectedResult = "--1886296771569184433434821207328460022854127670";
+
+    final var result = x.times(y).toString();
+    assertEquals(expectedResult, result);
   }
 
   @Test
