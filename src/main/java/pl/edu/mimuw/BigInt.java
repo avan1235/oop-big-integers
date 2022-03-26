@@ -69,7 +69,7 @@ public final class BigInt {
       //odejmowanie
       while(i<Math.max(this.digits.length, other.digits.length)) {
         if(i<this.digits.length && i<other.digits.length) k+=this.digits[this.digits.length-1-i]-other.digits[other.digits.length-1-i];
-        else if(i>=this.digits.length) k+=-other.digits[other.digits.length-1-i];
+        else if(i>=this.digits.length) k-=other.digits[other.digits.length-1-i];
         else k+=this.digits[this.digits.length-i-1];
         if(k<0) {
           tmp[tmp.length-1-i] = k+10;
@@ -127,7 +127,7 @@ public final class BigInt {
     while(ilezer<tmp.length-1 && tmp[ilezer]==0) ilezer++;
     int[] tmp2=new int[tmp.length-ilezer];
     for(int j=0;j<tmp.length-ilezer;j++) tmp2[j]=tmp[j+ilezer];
-    return new BigInt(tmp2, !(this.isPositive ^ other.isPositive));
+    return new BigInt(tmp2, (this.isPositive == other.isPositive));
   }
 
   @Override
